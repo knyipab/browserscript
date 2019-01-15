@@ -1,0 +1,46 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <!-- when using the mode "code", it's important to specify charset utf-8 -->
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+
+    <link href="jsoneditor.css" rel="stylesheet" type="text/css">
+    <script src="jsoneditor-minimalist.js"></script>
+
+    <link href="main.css" rel="stylesheet" type="text/css">
+    <script src="library.js"></script>
+    <script src="main.js"></script>
+</head>
+<body style="background-color: #EEEEEE; ">
+  <!-- Left portion -->
+  <ul>
+    <li style="float: left; padding: 8px;"><p style="font-size: 24px;"><b>Code Library</b> Bookmarklet <i>Editor</i></p></li>
+    <li style="width: 15%;"><p>&nbsp</p></li>
+    <li><a href="#">Help</a></li>
+    <li><a href="#">What is Code Library?</a></li>
+  </ul>
+  <!-- Left portion -->
+  <div class="column" style="width: 85%; position: fixed; height: 100%">
+    <div class="row" style="height: calc(100% - 50px - 150px); padding: 10px;" >
+      <div class="column2" id="jsoneditor" style="width: 80%; ">
+      </div>
+    </div>
+    <div class="row" style="height: 140px; height: 150px;">
+      <div class="column2" style="width: 300px; height: 150px; ">
+        <p style="user-select: none; display: inline-block; padding:15px;">Theme:</p>
+        <select id="theme_select_box" style="width: 200px; height: 32px; padding: 0px 5px 0px 5px;" onchange="fThemeSelect(this.value);">
+        </select>
+        <div id="theme_demo" style="padding:15px;"> </div>
+      </div>
+      <div class="column2" style="width: calc(100% - 300px); height: 150px; ">
+        <button class="button" style="width: 45%; height: 70%; margin: 2%; display: inline-block; " onclick="fExport()" >Export</button>
+        <a href="" id="output" style="width: 45%; height: 70%; margin: 0%; display: none; text-align: center; " >Save/Drag this link as/to bookmark</a>
+      </div>
+    </div>
+  </div>
+  <!-- Adversiting -->
+  <div style="left: 85%; width: 15%; height: 100%; position: fixed; background-color: grey;">
+    <p style="text-align: center; color: white; user-select: none;">Advertising</p>
+  </div>
+</body>
+</html>
