@@ -22,7 +22,7 @@
   <!-- Left portion -->
   <div class="column" style="width: 85%; position: fixed; height: 100%">
     <div class="row" style="height: calc(100% - 50px - 150px); padding: 10px;" >
-      <div class="column2" id="jsoneditor" style="width: 80%; ">
+      <div class="column2" id="jsoneditor" style="width: 100%; ">
       </div>
     </div>
     <div class="row" style="height: 140px; height: 150px;">
@@ -34,7 +34,13 @@
       </div>
       <div class="column2" style="width: calc(100% - 300px); height: 150px; ">
         <button class="button" style="width: 45%; height: 70%; margin: 2%; display: inline-block; " onclick="fExport()" >Export</button>
-        <a href="" id="output" style="width: 45%; height: 70%; margin: 0%; display: none; text-align: center; " >Save/Drag this link as/to bookmark</a>
+        <div id="output" style="width: 45%; height: 70%; margin: 0%; display: none; text-align: center; ">
+          <span style="display: inline-block; vertical-align: middle;">
+            <a id="output_url" href="">Code Library</a>
+            <p>↑</p>
+            <p>Save/Drag this link as/to bookmark</p>
+          </span>
+        </div>
       </div>
     </div>
   </div>

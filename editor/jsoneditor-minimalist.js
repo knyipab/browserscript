@@ -2675,7 +2675,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var pathObj = {
 	        name: getName(node),
 	        node: node,
-	        children: []
+	        children: [],
+					level: node.getLevel(),
+					index: node.getIndex() + 1
 	      };
 	      if (node.childs && node.childs.length) {
 	        node.childs.forEach(function (childNode) {
@@ -2695,7 +2697,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  function getName(node) {
 	    return node.parent
 	        ? ((node.parent.type === 'array') ? node.index : node.field)
-	        : node.type;
+	        : 'Code Library';
 	  }
 	};
 
@@ -6831,7 +6833,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var pathEl = document.createElement('span');
 	      var sepEl;
 	      pathEl.className = 'jsoneditor-treepath-element';
-	      pathEl.innerText = pathObj.name;
+				pathEl.innerText = pathObj.level === 1 ? pathObj.index.toString() : pathObj.name;
 	      pathEl.onclick = _onSegmentClick.bind(me, pathObj);
 
 	      me.path.appendChild(pathEl);
@@ -9357,11 +9359,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    else {
 	      fieldText = '';
 	    }
+			if (!this.parent)
+				fieldText = 'Code Library';
 	    domField.innerHTML = this._escapeHTML(fieldText);
 
 	    this._updateSchema();
 
-			if (fieldText.slice(0, 4) === '<div' && this.getLevel() === 1)
+			if (typeof(fieldText) === 'string' && fieldText.slice(0, 4) === '<div' && this.getLevel() === 1)
 				domField.innerHTML = fieldText;
 	  }
 
@@ -9400,7 +9404,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    else {
 	      fieldText = '';
 	    }
-			if (fieldText.slice(0, 4) === '<div' && this.getLevel() === 1)
+			if (typeof(fieldText) === 'string' && fieldText.slice(0, 4) === '<div' && this.getLevel() === 1)
 				domField.innerHTML = fieldText;
 	  }
 
@@ -9976,12 +9980,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  }
 	  else if (keynum == 45 && editable) { // Ins
-	    if (ctrlKey && !shiftKey) {       // Ctrl+Ins
-	      this._onInsertBefore();
+	    if (ctrlKey && !shiftKey && this.getLevel() > 2) {       // Ctrl+Ins
+	      this._onInsertAfter('Code name', 'type code here');
 	      handled = true;
 	    }
-	    else if (ctrlKey && shiftKey) {   // Ctrl+Shift+Ins
-	      this._onInsertAfter();
+	    else if (ctrlKey && shiftKey && this.getLevel() > 2) {   // Ctrl+Shift+Ins
+	      this._onInsertAfter('Menu name', {});
 	      handled = true;
 	    }
 	  }
@@ -11036,7 +11040,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        node._onAppend(name, data);
 	    };
 	    var insertData = function (name, data) {
-	        node._onInsertBefore(name, data);
+	        node._onInsertAfter(name, data);//_onInsertBefore(name, data);
 	    };
 	    templates.forEach(function (template) {
 	        menu.push({
@@ -11060,32 +11064,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	  var titles = Node.TYPE_TITLES;
 	  var items = [];
 
-	  if (this.editable.value) {
+	  if (this.getLevel() > 2 && this.editable.value) {
 	    items.push({
-	      text: translate('type'),
+	      text: 'Change ...',
 	      title: translate('typeTitle'),
 	      className: 'jsoneditor-type-' + this.type,
 	      submenu: [
 	        {
-	          text: translate('auto'),
-	          className: 'jsoneditor-type-auto' +
-	              (this.type == 'auto' ? ' jsoneditor-selected' : ''),
-	          title: titles.auto,
-	          click: function () {
-	            node._onChangeType('auto');
-	          }
-	        },
-	        {
-	          text: translate('array'),
-	          className: 'jsoneditor-type-array' +
-	              (this.type == 'array' ? ' jsoneditor-selected' : ''),
-	          title: titles.array,
-	          click: function () {
-	            node._onChangeType('array');
-	          }
-	        },
-	        {
-	          text: translate('object'),
+	          text: 'Menu',
 	          className: 'jsoneditor-type-object' +
 	              (this.type == 'object' ? ' jsoneditor-selected' : ''),
 	          title: titles.object,
@@ -11094,7 +11080,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          }
 	        },
 	        {
-	          text: translate('string'),
+	          text: 'Code',
 	          className: 'jsoneditor-type-string' +
 	              (this.type == 'string' ? ' jsoneditor-selected' : ''),
 	          title: titles.string,
@@ -11142,7 +11128,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    // create append button (for last child node only)
 	    var childs = node.parent.childs;
-	    if (node == childs[childs.length - 1]) {
+	    if (false) {
 	        var appendSubmenu = [
 	            {
 	                text: translate('auto'),
@@ -11193,50 +11179,22 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	    // create insert button
-	    var insertSubmenu = [
-	        {
-	            text: translate('auto'),
-	            className: 'jsoneditor-type-auto',
-	            title: titles.auto,
-	            click: function () {
-	                node._onInsertBefore('', '', 'auto');
-	            }
-	        },
-	        {
-	            text: translate('array'),
-	            className: 'jsoneditor-type-array',
-	            title: titles.array,
-	            click: function () {
-	                node._onInsertBefore('', []);
-	            }
-	        },
-	        {
-	            text: translate('object'),
-	            className: 'jsoneditor-type-object',
-	            title: titles.object,
-	            click: function () {
-	                node._onInsertBefore('', {});
-	            }
-	        },
-	        {
-	            text: translate('string'),
-	            className: 'jsoneditor-type-string',
-	            title: titles.string,
-	            click: function () {
-	                node._onInsertBefore('', '', 'string');
-	            }
-	        }
-	    ];
-	    node.addTemplates(insertSubmenu, false);
+			if (this.getLevel() > 2)
+		    items.push({
+		      text: 'New Code',
+		      title: 'New a paragraph of codes (Ctrl+Ins)',
+		      className: 'jsoneditor-insert',
+		      click: function () {
+		        node._onInsertAfter('Code name', 'type code here');
+		      }
+		    });
 	    items.push({
-	      text: translate('insert'),
-	      title: translate('insertTitle'),
-	      submenuTitle: translate('insertSub'),
+	      text: 'New Menu',
+	      title: 'New a menu (Ctrl+Shift+Ins)',
 	      className: 'jsoneditor-insert',
 	      click: function () {
-	        node._onInsertBefore('', '', 'auto');
-	      },
-	      submenu: insertSubmenu
+	        node._onInsertAfter('Menu name', {});
+	      }
 	    });
 
 	    if (this.editable.field) {
@@ -13348,13 +13306,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	  AppendNode.prototype.showContextMenu = function (anchor, onClose) {
 	    var node = this;
 	    var titles = Node.TYPE_TITLES;
-	    var appendSubmenu = [
+	    /*var appendSubmenu = [
 	        {
 	            text: translate('auto'),
 	            className: 'jsoneditor-type-auto',
 	            title: titles.auto,
 	            click: function () {
-	                node._onAppend('', '', 'auto');
+	                node._onInsertAfter('', '', 'auto');
 	            }
 	        },
 	        {
@@ -13395,7 +13353,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	        },
 	        'submenu': appendSubmenu
 	      }
-	    ];
+	    ];*/
+			var items = [];
+			if (this.getLevel() > 2)
+		    items.push({
+		      text: 'New Code',
+		      title: 'New a paragraph of codes (Ctrl+Ins)',
+		      className: 'jsoneditor-insert',
+		      click: function () {
+		        node._onInsertAfter('Code name', 'type code here');
+		      }
+		    });
+	    items.push({
+	      text: 'New Menu',
+	      title: 'New a menu (Ctrl+Shift+Ins)',
+	      className: 'jsoneditor-insert',
+	      click: function () {
+	        node._onInsertAfter('Menu name', {});
+	      }
+	    });
 
 	    var menu = new ContextMenu(items, {close: onClose});
 	    menu.show(anchor, this.editor.content);

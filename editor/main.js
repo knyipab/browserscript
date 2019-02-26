@@ -1,9 +1,40 @@
-function fFormat(library, theme, x, y, parent, editor_mode) {
+var editor;
+var themes = {
+  'One White': {
+    sub_menu: 'position: absolute; box-shadow: 0 0 24px 0 rgba(0,0,0,0.2),0 0 77px 0 rgba(0,0,0,0.22); margin: 0px; padding: 0px; ',
+    sub_menu_lang: 'display: block; font-family: Calibri; font-size: 16px; color: #000000; background-color: #FFFFFF; text-align: center; padding: 0px; margin: 0px; border-bottom: solid #CCCCCC 1px; text-decoration: none; user-select: none; ',
+    sub_menu_item: 'display: block; font-family: Calibri; font-size: 16px; color: #000000; background-color: #FFFFFF; text-align: center; padding: 2px 8px 2px 8px; margin: 0px; border-bottom: solid #CCCCCC 1px; text-decoration: none; user-select: none; ',
+    sub_menu_item_hover: 'background-color: #AAAAAA; ',
+    menu: 'left: 0; box-shadow: 0 0 24px 0 rgba(0,0,0,0.2),0 0 77px 0 rgba(0,0,0,0.22); margin: 0px; padding: 0px; display: table; ',
+    menu_collapse: 'display: block; font-family: Calibri; font-size: 16px; color: #000000; background-color: #AAAAAA; height: 40px; text-align: left; vertical-align: middle; padding: 0px 10px 0px 10px; boarder-left: solid #CCCCCC 0.25px; border-right: solid #CCCCCC 0.25px; text-decoration: none; margin: 0px; user-select: none; display: table-cell;',
+    menu_collapse_hover: 'background-color: #606060; ',
+    menu_item: 'display: block; font-family: Calibri; font-size: 16px; color: #000000; background-color: #FFFFFF; height: 40px; text-align: left; vertical-align: middle; padding: 0px 10px 0px 10px; boarder-left: solid #CCCCCC 0.25px; border-right: solid #CCCCCC 0.25px; text-decoration: none; margin: 0px; user-select: none; display: table-cell;',
+    menu_lang: 'display: block; font-family: Calibri; font-size: 16px; color: #000000; background-color: #FFFFFF; height: 40px; text-align: left; vertical-align: middle; padding: 0px; boarder-left: solid #CCCCCC 0.25px; border-right: solid #CCCCCC 0.25px; text-decoration: none; margin: 0px; user-select: none; display: table-cell;',
+    menu_item_hover: 'background-color: #AAAAAA; ',
+    whole_element: 'position: fixed; z-index: 2147483647; margin: 0px; padding: 0px; ',
+  },
+  'One Dark': {
+    sub_menu: 'position: absolute; box-shadow: 0 0 24px 0 rgba(0,0,0,0.2),0 0 77px 0 rgba(0,0,0,0.22); margin: 0px; padding: 0px; ',
+    sub_menu_lang: 'display: block; font-family: Calibri; font-size: 16px; color: #EEEEEE; background-color: #222222; text-align: center; padding: 0px; margin: 0px; border-bottom: solid #CCCCCC 1px; text-decoration: none; user-select: none; ',
+    sub_menu_item: 'display: block; font-family: Calibri; font-size: 16px; color: #EEEEEE; background-color: #222222; text-align: center; padding: 2px 8px 2px 8px; margin: 0px; border-bottom: solid #CCCCCC 1px; text-decoration: none; user-select: none; ',
+    sub_menu_item_hover: 'background-color: #444444; ',
+    menu: 'left: 0; box-shadow: 0 0 24px 0 rgba(0,0,0,0.2),0 0 77px 0 rgba(0,0,0,0.22); margin: 0px; padding: 0px; display: table; ',
+    menu_collapse: 'display: block; font-family: Calibri; font-size: 16px; color: #EEEEEE; background-color: #666666; height: 40px; text-align: left; vertical-align: middle; padding: 0px 10px 0px 10px; boarder-left: solid #CCCCCC 0.25px; border-right: solid #CCCCCC 0.25px; text-decoration: none; margin: 0px; user-select: none; display: table-cell;',
+    menu_collapse_hover: 'background-color: #AAAAAA; ',
+    menu_item: 'display: block; font-family: Calibri; font-size: 16px; color: #EEEEEE; background-color: #222222; height: 40px; text-align: left; vertical-align: middle; padding: 0px 10px 0px 10px; boarder-left: solid #CCCCCC 0.25px; border-right: solid #CCCCCC 0.25px; text-decoration: none; margin: 0px; user-select: none; display: table-cell;',
+    menu_lang: 'display: block; font-family: Calibri; font-size: 16px; color: #EEEEEE; background-color: #222222; height: 40px; text-align: left; vertical-align: middle; padding: 0px; boarder-left: solid #CCCCCC 0.25px; border-right: solid #CCCCCC 0.25px; text-decoration: none; margin: 0px; user-select: none; display: table-cell;',
+    menu_item_hover: 'background-color: #444444; ',
+    whole_element: 'position: fixed; z-index: 2147483647; margin: 0px; padding: 0px; ',
+  }
+};
+
+function fFormat(library, current_theme, x, y, parent, editor_mode) {
   return `${editor_mode ? '' : 'javascript:'}
   (function (parent, editor_mode){
 
   var library = ${library};
-  var theme = ${theme};
+  var theme = ${JSON.stringify(themes[current_theme])};
+  var current_theme = ${JSON.stringify(current_theme)};
 
   var original_focus;
   var text_cursor = [];
@@ -191,15 +222,15 @@ function fFormat(library, theme, x, y, parent, editor_mode) {
     background.style.all = 'initial';
     background.style.cssText += 'z-index: 2147483647; background: #000000; position: fixed; left: 0; top: 0; bottom: 0; right: 0; opacity: 0.5;';
     var editor = document.createElement('iframe');
-    editor.src = 'https://jsoneditoronline.org/';
+    editor.src = 'https://github.com/knyipab/Code-Library/editor';
     editor.style.all = 'initial';
     editor.style.cssText += 'z-index: 2147483647; background: #FFFFFF; position: fixed; left: 10%; top: 10%; width: 80%; height: 80%;';
+    editor.onload = function() { editor.contentWindow.postMessage({library: library, current_theme: current_theme, x_pos: coordinates.beforeDragX, y_pos: coordinates.beforeDragY}, '*'); };
     background.addEventListener('mouseup', function () {editor.remove(); background.remove()});
     background.addEventListener('touchend', function () {editor.remove(); background.remove()});
 
     parent.appendChild(background);
     parent.appendChild(editor);
-
   }
 
   function fCreateWholeElement() {
@@ -219,34 +250,22 @@ function fFormat(library, theme, x, y, parent, editor_mode) {
   })(${parent},${editor_mode});`;
 }
 
-var themes = {
-  'One White': {
-    sub_menu: 'position: absolute; box-shadow: 0 0 24px 0 rgba(0,0,0,0.2),0 0 77px 0 rgba(0,0,0,0.22); margin: 0px; padding: 0px; ',
-    sub_menu_lang: 'display: block; font-family: Calibri; font-size: 16px; color: #000000; background-color: #FFFFFF; text-align: center; padding: 0px; margin: 0px; border-bottom: solid #CCCCCC 1px; text-decoration: none; user-select: none; ',
-    sub_menu_item: 'display: block; font-family: Calibri; font-size: 16px; color: #000000; background-color: #FFFFFF; text-align: center; padding: 2px 8px 2px 8px; margin: 0px; border-bottom: solid #CCCCCC 1px; text-decoration: none; user-select: none; ',
-    sub_menu_item_hover: 'background-color: #AAAAAA; ',
-    menu: 'left: 0; box-shadow: 0 0 24px 0 rgba(0,0,0,0.2),0 0 77px 0 rgba(0,0,0,0.22); margin: 0px; padding: 0px; display: table; ',
-    menu_collapse: 'display: block; font-family: Calibri; font-size: 16px; color: #000000; background-color: #AAAAAA; height: 40px; text-align: left; vertical-align: middle; padding: 0px 10px 0px 10px; boarder-left: solid #CCCCCC 0.25px; border-right: solid #CCCCCC 0.25px; text-decoration: none; margin: 0px; user-select: none; display: table-cell;',
-    menu_collapse_hover: 'background-color: #606060; ',
-    menu_item: 'display: block; font-family: Calibri; font-size: 16px; color: #000000; background-color: #FFFFFF; height: 40px; text-align: left; vertical-align: middle; padding: 0px 10px 0px 10px; boarder-left: solid #CCCCCC 0.25px; border-right: solid #CCCCCC 0.25px; text-decoration: none; margin: 0px; user-select: none; display: table-cell;',
-    menu_lang: 'display: block; font-family: Calibri; font-size: 16px; color: #000000; background-color: #FFFFFF; height: 40px; text-align: left; vertical-align: middle; padding: 0px; boarder-left: solid #CCCCCC 0.25px; border-right: solid #CCCCCC 0.25px; text-decoration: none; margin: 0px; user-select: none; display: table-cell;',
-    menu_item_hover: 'background-color: #AAAAAA; ',
-    whole_element: 'position: fixed; z-index: 2147483647; margin: 0px; padding: 0px; ',
-  },
-  'One Dark': {
-    sub_menu: 'position: absolute; box-shadow: 0 0 24px 0 rgba(0,0,0,0.2),0 0 77px 0 rgba(0,0,0,0.22); margin: 0px; padding: 0px; ',
-    sub_menu_lang: 'display: block; font-family: Calibri; font-size: 16px; color: #EEEEEE; background-color: #222222; text-align: center; padding: 0px; margin: 0px; border-bottom: solid #CCCCCC 1px; text-decoration: none; user-select: none; ',
-    sub_menu_item: 'display: block; font-family: Calibri; font-size: 16px; color: #EEEEEE; background-color: #222222; text-align: center; padding: 2px 8px 2px 8px; margin: 0px; border-bottom: solid #CCCCCC 1px; text-decoration: none; user-select: none; ',
-    sub_menu_item_hover: 'background-color: #444444; ',
-    menu: 'left: 0; box-shadow: 0 0 24px 0 rgba(0,0,0,0.2),0 0 77px 0 rgba(0,0,0,0.22); margin: 0px; padding: 0px; display: table; ',
-    menu_collapse: 'display: block; font-family: Calibri; font-size: 16px; color: #EEEEEE; background-color: #666666; height: 40px; text-align: left; vertical-align: middle; padding: 0px 10px 0px 10px; boarder-left: solid #CCCCCC 0.25px; border-right: solid #CCCCCC 0.25px; text-decoration: none; margin: 0px; user-select: none; display: table-cell;',
-    menu_collapse_hover: 'background-color: #AAAAAA; ',
-    menu_item: 'display: block; font-family: Calibri; font-size: 16px; color: #EEEEEE; background-color: #222222; height: 40px; text-align: left; vertical-align: middle; padding: 0px 10px 0px 10px; boarder-left: solid #CCCCCC 0.25px; border-right: solid #CCCCCC 0.25px; text-decoration: none; margin: 0px; user-select: none; display: table-cell;',
-    menu_lang: 'display: block; font-family: Calibri; font-size: 16px; color: #EEEEEE; background-color: #222222; height: 40px; text-align: left; vertical-align: middle; padding: 0px; boarder-left: solid #CCCCCC 0.25px; border-right: solid #CCCCCC 0.25px; text-decoration: none; margin: 0px; user-select: none; display: table-cell;',
-    menu_item_hover: 'background-color: #444444; ',
-    whole_element: 'position: fixed; z-index: 2147483647; margin: 0px; padding: 0px; ',
-  }
-};
+
+
+window.addEventListener("message", function(event) {
+  console.log(event.data);
+  if (event.data.library)
+    library = event.data.library;
+  if (event.data.current_theme)
+    current_theme = event.data.current_theme;
+  if (event.data.x_pos)
+    x_pos = event.data.x_pos;
+  if (event.data.y_pos)
+    y_pos = event.data.y_pos;
+
+  fInit();
+  document.getElementById('theme_select_box').value = current_theme;
+}, false);
 
 if (typeof current_theme === 'undefined')
   current_theme = Object.keys(themes)[0];
@@ -271,27 +290,27 @@ function fThemeSelect(theme, parent, initialization) {
       'Item B': {'Item': ''},
       'Item C': {'Item': ''}
     }
-  }), JSON.stringify(themes[theme]), 0, 48, 'parent', true));
+  }), theme, 0, 48, 'parent', true));
 }
 
 function fExport() {
-  var output = document.getElementById('output');
-  output.style.display = 'inline-block';
-  var url = fFormat(JSON.stringify(document.getElementById('jsoneditor').my_editor.get()), JSON.stringify(themes[current_theme]), x_pos, y_pos, 'document.body', false);
-  output.href = url;
+  document.getElementById('output').style.display = 'inline-block';
+  var url = fFormat(JSON.stringify(editor.get()), current_theme, x_pos, y_pos, 'document.body', false);
+  document.getElementById('output_url').href = url;
+}
+
+function fInit() {
+  editor.set(library);
+  fThemeSelect(current_theme, true);
 }
 
 window.onload = function (){
-  var container = document.getElementById('jsoneditor');
-  var options = {};
-  container.my_editor = new JSONEditor(container, options);
-  container.my_editor.set(library);
-
-  fThemeSelect(current_theme, true);
+  editor = new JSONEditor(document.getElementById('jsoneditor'), {enableTransform: false, enableSort: false});
   for (key in themes) {
     var option = document.createElement('option');
     option.value = key;
     option.innerHTML = key;
     document.getElementById('theme_select_box').appendChild(option);
   }
+  fInit();
 };

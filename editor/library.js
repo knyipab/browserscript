@@ -46,7 +46,7 @@ var library = {
       "Sampling": ".sample(n=None, frac=None, replace=False, axis=None)",
       "Apply(r/c)": ".apply(func, axis=0)",
       "Apply(element)": ".applymap(func)",
-      "Sort(data)": ".sort_index(by='col_name')",
+      "Sort(by data)": ".sort_values(by='col_name')",
       "Sort(row names)": ".sort_index()",
       "Sort(col names)": ".sort_index(axis=1)",
       "Transpose": ".T",
