@@ -229,7 +229,7 @@ function fFormat(library, current_theme, x, y, parent, editor_mode) {
     background.style.all = 'initial';
     background.style.cssText += 'z-index: 2147483647; background: #000000; position: fixed; left: 0; top: 0; bottom: 0; right: 0; opacity: 0.5;';
     var editor = document.createElement('iframe');
-    editor.src = 'https://github.com/knyipab/Code-Library/editor';
+    editor.src = 'https://knyipab.github.io/Code-Library/editor/';
     editor.style.all = 'initial';
     editor.style.cssText += 'z-index: 2147483647; background: #FFFFFF; position: fixed; left: 10%; top: 10%; width: 80%; height: 80%;';
     editor.onload = function() { editor.contentWindow.postMessage({library: library, current_theme: current_theme, x_pos: coordinates.beforeDragX, y_pos: coordinates.beforeDragY}, '*'); };
