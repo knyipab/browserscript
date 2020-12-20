@@ -47,15 +47,22 @@ function fFormat(library, current_theme, x, y, parent, editor_mode) {
     original_focus = document.activeElement;
   }
   function fInsertScript(script){
-    if (original_focus) {
+    if (original_focus && original_focus.selectionStart) {
       text_cursor[0] = original_focus.selectionStart;
       text_cursor[1] = original_focus.selectionEnd;
     }
     if (text_cursor[0] != null) {
-      var v = original_focus.value;
       original_focus.focus();
-      original_focus.value = script;
-      original_focus.selectionStart = original_focus.selectionEnd = text_cursor[0] + script.length;
+      if (typeof colab !== 'undefined') {
+        var text = colab.global.notebook.focusedCell_.getText();
+        var selStart = colab.global.notebook.focusedCell_.editor.getOffsetAt(colab.global.notebook.focusedCell_.editor.getCursor());
+        colab.global.notebook.focusedCell_.setText(text.substr(0, selStart) + script + text.substr(selStart + text_cursor[1] - text_cursor[0]));
+        colab.global.notebook.focusedCell_.editor.setCursor(colab.global.notebook.focusedCell_.editor.getPositionAt(selStart + script.length));
+      } else {
+        original_focus.value = script;
+        original_focus.selectionStart = original_focus.selectionEnd = text_cursor[0] + script.length;
+      }
+      
     }
     fRemoveAllSubMenus();
   }
@@ -295,6 +302,10 @@ function fThemeSelect(theme, parent, initialization) {
 
 function fExport() {
   document.getElementById('output').style.display = 'inline-block';
+  setTimeout(() => document.getElementById('output').style.display = "none", 100);
+  setTimeout(() => document.getElementById('output').style.display = "inline-block", 200);
+  setTimeout(() => document.getElementById('output').style.display = "none", 300);
+  setTimeout(() => document.getElementById('output').style.display = "inline-block", 400);
   var url = fFormat(JSON.stringify(editor.get()), current_theme, x_pos, y_pos, 'document.body', false);
   document.getElementById('output_url').href = url;
 }
