@@ -58,6 +58,9 @@ function fFormat(library, current_theme, x, y, parent, editor_mode) {
         var selStart = colab.global.notebook.focusedCell_.editor.getOffsetAt(colab.global.notebook.focusedCell_.editor.getCursor());
         colab.global.notebook.focusedCell_.setText(text.substr(0, selStart) + script + text.substr(selStart + text_cursor[1] - text_cursor[0]));
         colab.global.notebook.focusedCell_.editor.setCursor(colab.global.notebook.focusedCell_.editor.getPositionAt(selStart + script.length));
+      } else if (window.location.host.match(/insights.ceicdata.com/)) {
+        original_focus.value += script;
+        original_focus.selectionStart = original_focus.selectionEnd = original_focus.value.length;
       } else {
         original_focus.value = script;
         original_focus.selectionStart = original_focus.selectionEnd = text_cursor[0] + script.length;
@@ -288,14 +291,14 @@ function fThemeSelect(theme, parent, initialization) {
     document.getElementById('theme_demo').lastChild.remove();
   eval(fFormat(JSON.stringify({
     '<div style="width: 40px; height: 40px; padding: 10px;">🌐</div>': {
-      'Item 1': {'Folder': {'Item 1': '', 'Item 2': ''}, 'Item': ''},
-      'Item 2': {'Item': ''},
-      'Item 3': {'Item': ''}
+      'Item 1': {'Folder': {'Item 1': 'demo_code', 'Item 2': 'demo_code'}, 'Item': 'demo_code'},
+      'Item 2': {'Item': 'demo_code'},
+      'Item 3': {'Item': 'demo_code'}
     },
     '<div style="width: 40px; height: 40px; padding: 10px;">📙</div>': {
-      'Item A': {'Folder': {'Item A': '', 'Item B': ''}, 'Item': ''},
-      'Item B': {'Item': ''},
-      'Item C': {'Item': ''}
+      'Item A': {'Folder': {'Item A': 'demo_code', 'Item B': 'demo_code'}, 'Item': 'demo_code'},
+      'Item B': {'Item': 'demo_code'},
+      'Item C': {'Item': 'demo_code'}
     }
   }), theme, 0, 48, 'parent', true));
 }

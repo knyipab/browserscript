@@ -11,6 +11,9 @@ pids
 *.seed
 *.pid.lock
 
+#backup
+*.bak
+
 # Archive
 archive/
 
