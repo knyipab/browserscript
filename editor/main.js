@@ -54,14 +54,21 @@ function fFormat(library, current_theme, x, y, parent, editor_mode) {
     if (text_cursor[0] != null) {
       original_focus.focus();
       if (typeof colab !== 'undefined') {
+        /* Google Colab */
         var text = colab.global.notebook.focusedCell_.getText();
         var selStart = colab.global.notebook.focusedCell_.editor.getOffsetAt(colab.global.notebook.focusedCell_.editor.getCursor());
         colab.global.notebook.focusedCell_.setText(text.substr(0, selStart) + script + text.substr(selStart + text_cursor[1] - text_cursor[0]));
         colab.global.notebook.focusedCell_.editor.setCursor(colab.global.notebook.focusedCell_.editor.getPositionAt(selStart + script.length));
       } else if (window.location.host.match(/insights.ceicdata.com/)) {
+        /* ceic */
         original_focus.value += script;
         original_focus.selectionStart = original_focus.selectionEnd = original_focus.value.length;
+      } else if (typeof $RStudio !== 'undefined' && typeof ace !== 'undefined') {
+        if ($RStudio.last_focused_editor_id && ace.edit($RStudio.last_focused_editor_id).isFocused()) {
+          ace.edit($RStudio.last_focused_editor_id).insertSnippet(script);
+        }
       } else {
+        /* jupyter lab and other sites */
         original_focus.value = script;
         original_focus.selectionStart = original_focus.selectionEnd = text_cursor[0] + script.length;
       }
