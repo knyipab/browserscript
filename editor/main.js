@@ -19,6 +19,7 @@ function fFormat(cs, thn, x, y, pr, em, od=false, os={}) {
     /* oa = Object.assign(), ok = Object.keys() */
     oa = (x, y) => Object.assign(x, y), 
     ok = x => Object.keys(x?x:{});
+    console.log(pr);
     /******************
      * main - offline *
      ******************/
@@ -29,13 +30,15 @@ function fFormat(cs, thn, x, y, pr, em, od=false, os={}) {
     if (od) {
       fr = pe('iframe')[0];
       as(fr, {display: 'none'});
-      fr.onload = _ => { fr.contentWindow.postMessage({}, '*'); };
+      fr.onload = _ => { fr.contentWindow.postMessage({thn}, '*'); };
       fr.src = os.url;
     }
-    window.addEventListener("message", e => {
-      console.log(e.data.msg);
-      od && e.data.cs && e.data.th && (coder(e.data.cs && e.data.th), fr.remove());
-    });
+    var oms = e => {
+      console.log(e.data);
+      od && e.data.cs && e.data.th && (fr.remove(), coder(e.data.cs, e.data.th));
+      window.removeEventListener('message', oms);
+    };
+    window.addEventListener('message', oms);
     /******************
      *  coder(cs, th) *
      ******************/
@@ -188,7 +191,6 @@ function fFormat(cs, thn, x, y, pr, em, od=false, os={}) {
 }
 
 
-
 window.addEventListener("message", function(event) {
   console.log(event.data);
   // read message from coder.js
@@ -203,7 +205,6 @@ window.addEventListener("message", function(event) {
   if (event.data.current_theme)   current_theme = event.data.current_theme;
   if (event.data.x_pos)           x_pos = event.data.x_pos;
   if (event.data.y_pos)           y_pos = event.data.y_pos;
-  event.source.postMessage({msg: 'code.js configuration loaded. '}, '*');
 
   fInit();
   document.getElementById('theme_select_box').value = current_theme;
