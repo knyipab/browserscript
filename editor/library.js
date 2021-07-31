@@ -9,4 +9,5 @@ var library = {
     'Item B': {'Item': 'demo_code'},
     'Item C': {'Item': 'demo_code'}
   }
-}
+};
+var library_demo = Object.assign({}, library);

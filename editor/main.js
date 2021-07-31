@@ -1,313 +1,229 @@
 var editor;
-var themes = {
-  'One White': {
-    sub_menu: 'position: absolute; box-shadow: 0 0 24px 0 rgba(0,0,0,0.2),0 0 77px 0 rgba(0,0,0,0.22); margin: 0px; padding: 0px; ',
-    sub_menu_lang: 'display: block; font-family: Calibri; font-size: 16px; color: #000000; background-color: #FFFFFF; text-align: center; padding: 0px; margin: 0px; border-bottom: solid #CCCCCC 1px; text-decoration: none; user-select: none; ',
-    sub_menu_item: 'display: block; font-family: Calibri; font-size: 16px; color: #000000; background-color: #FFFFFF; text-align: center; padding: 2px 8px 2px 8px; margin: 0px; border-bottom: solid #CCCCCC 1px; text-decoration: none; user-select: none; ',
-    sub_menu_item_hover: 'background-color: #AAAAAA; ',
-    menu: 'left: 0; box-shadow: 0 0 24px 0 rgba(0,0,0,0.2),0 0 77px 0 rgba(0,0,0,0.22); margin: 0px; padding: 0px; display: table; ',
-    menu_collapse: 'display: block; font-family: Calibri; font-size: 16px; color: #000000; background-color: #AAAAAA; height: 40px; text-align: left; vertical-align: middle; padding: 0px 10px 0px 10px; boarder-left: solid #CCCCCC 0.25px; border-right: solid #CCCCCC 0.25px; text-decoration: none; margin: 0px; user-select: none; display: table-cell;',
-    menu_collapse_hover: 'background-color: #606060; ',
-    menu_item: 'display: block; font-family: Calibri; font-size: 16px; color: #000000; background-color: #FFFFFF; height: 40px; text-align: left; vertical-align: middle; padding: 0px 10px 0px 10px; boarder-left: solid #CCCCCC 0.25px; border-right: solid #CCCCCC 0.25px; text-decoration: none; margin: 0px; user-select: none; display: table-cell;',
-    menu_lang: 'display: block; font-family: Calibri; font-size: 16px; color: #000000; background-color: #FFFFFF; height: 40px; text-align: left; vertical-align: middle; padding: 0px; boarder-left: solid #CCCCCC 0.25px; border-right: solid #CCCCCC 0.25px; text-decoration: none; margin: 0px; user-select: none; display: table-cell;',
-    menu_item_hover: 'background-color: #AAAAAA; ',
-    whole_element: 'position: fixed; z-index: 2147483647; margin: 0px; padding: 0px; ',
-  },
-  'One Dark': {
-    sub_menu: 'position: absolute; box-shadow: 0 0 24px 0 rgba(0,0,0,0.2),0 0 77px 0 rgba(0,0,0,0.22); margin: 0px; padding: 0px; ',
-    sub_menu_lang: 'display: block; font-family: Calibri; font-size: 16px; color: #EEEEEE; background-color: #222222; text-align: center; padding: 0px; margin: 0px; border-bottom: solid #CCCCCC 1px; text-decoration: none; user-select: none; ',
-    sub_menu_item: 'display: block; font-family: Calibri; font-size: 16px; color: #EEEEEE; background-color: #222222; text-align: center; padding: 2px 8px 2px 8px; margin: 0px; border-bottom: solid #CCCCCC 1px; text-decoration: none; user-select: none; ',
-    sub_menu_item_hover: 'background-color: #444444; ',
-    menu: 'left: 0; box-shadow: 0 0 24px 0 rgba(0,0,0,0.2),0 0 77px 0 rgba(0,0,0,0.22); margin: 0px; padding: 0px; display: table; ',
-    menu_collapse: 'display: block; font-family: Calibri; font-size: 16px; color: #EEEEEE; background-color: #666666; height: 40px; text-align: left; vertical-align: middle; padding: 0px 10px 0px 10px; boarder-left: solid #CCCCCC 0.25px; border-right: solid #CCCCCC 0.25px; text-decoration: none; margin: 0px; user-select: none; display: table-cell;',
-    menu_collapse_hover: 'background-color: #AAAAAA; ',
-    menu_item: 'display: block; font-family: Calibri; font-size: 16px; color: #EEEEEE; background-color: #222222; height: 40px; text-align: left; vertical-align: middle; padding: 0px 10px 0px 10px; boarder-left: solid #CCCCCC 0.25px; border-right: solid #CCCCCC 0.25px; text-decoration: none; margin: 0px; user-select: none; display: table-cell;',
-    menu_lang: 'display: block; font-family: Calibri; font-size: 16px; color: #EEEEEE; background-color: #222222; height: 40px; text-align: left; vertical-align: middle; padding: 0px; boarder-left: solid #CCCCCC 0.25px; border-right: solid #CCCCCC 0.25px; text-decoration: none; margin: 0px; user-select: none; display: table-cell;',
-    menu_item_hover: 'background-color: #444444; ',
-    whole_element: 'position: fixed; z-index: 2147483647; margin: 0px; padding: 0px; ',
-  }
-};
 
-function fFormat(library, current_theme, x, y, parent, editor_mode) {
-  return `${editor_mode ? '' : 'javascript:'}
-  (function (parent, editor_mode){
-
-  var library = ${library};
-  var theme = ${JSON.stringify(themes[current_theme])};
-  var current_theme = ${JSON.stringify(current_theme)};
-
-  var original_focus;
-  var text_cursor = [];
-  var is_expended = 1;
-  var whole_element;
-  var sub_menu_elements = [];
-  var coordinates = {clientStartX: 0, clientStartY: 0, beforeDragX: ${x}, beforeDragY: ${y}, draggingX: 0, draggingY: 0};
-  var language = Object.keys(library)[0];
-  function onAnythingHover() {
-    original_focus = document.activeElement;
-  }
-  function fInsertScript(script){
-    if (original_focus && original_focus.selectionStart) {
-      text_cursor[0] = original_focus.selectionStart;
-      text_cursor[1] = original_focus.selectionEnd;
+function fFormat(cs, thn, x, y, pr, em, od=false, os={}) {
+  // comment the return line below using "//" and edit
+  return (`${em ? '' : 'javascript:'}
+  /* cs = code snippets = library, th = theme, od = online data */
+  ((od=`+od+`, os=`+JSON.stringify(os)+`) => {
+    var fr, 
+    /* thn = theme names = current_theme, pr = parent, em = edit_mode */
+    thn = `+JSON.stringify(thn)+`, 
+    pr = `+pr+`, 
+    em = `+em+`, 
+    /* ce = createElement, as = assign style, el = addEventListener, ac = appendChild, pe = pr.appendChild + ce */
+    ce = x => document.createElement(x),
+    as = (x, y) => oa(x.style, y), 
+    el = (e, ...x) => {var f = x.pop(); x.map(i => e.addEventListener(i, f)); }, 
+    ac = (e, x) => e.appendChild(x), 
+    pe = (...x) => x.map(i => pr.appendChild(ce(i))), 
+    /* oa = Object.assign(), ok = Object.keys() */
+    oa = (x, y) => Object.assign(x, y), 
+    ok = x => Object.keys(x?x:{});
+    /******************
+     * main - offline *
+     ******************/
+    !od && coder(`+(od?'{}':JSON.stringify(cs))+`, `+(od?'""':JSON.stringify(themes[thn]))+`);
+    /*****************
+     * main - online *
+     *****************/
+    if (od) {
+      fr = pe('iframe')[0];
+      as(fr, {display: 'none'});
+      fr.onload = _ => { fr.contentWindow.postMessage({}, '*'); };
+      fr.src = os.url;
     }
-    if (text_cursor[0] != null) {
-      original_focus.focus();
-      if (typeof colab !== 'undefined') {
-        /* Google Colab */
-        var text = colab.global.notebook.focusedCell_.getText();
-        var selStart = colab.global.notebook.focusedCell_.editor.getOffsetAt(colab.global.notebook.focusedCell_.editor.getCursor());
-        colab.global.notebook.focusedCell_.setText(text.substr(0, selStart) + script + text.substr(selStart + text_cursor[1] - text_cursor[0]));
-        colab.global.notebook.focusedCell_.editor.setCursor(colab.global.notebook.focusedCell_.editor.getPositionAt(selStart + script.length));
-      } else if (window.location.host.match(/insights.ceicdata.com/)) {
-        /* ceic */
-        original_focus.value += script;
-        original_focus.selectionStart = original_focus.selectionEnd = original_focus.value.length;
-      } else if (typeof $RStudio !== 'undefined' && typeof ace !== 'undefined') {
-        if ($RStudio.last_focused_editor_id && ace.edit($RStudio.last_focused_editor_id).isFocused()) {
-          ace.edit($RStudio.last_focused_editor_id).insertSnippet(script);
-        }
-      } else {
-        /* jupyter lab and other sites */
-        original_focus.value = script;
-        original_focus.selectionStart = original_focus.selectionEnd = text_cursor[0] + script.length;
-      }
-      
-    }
-    fRemoveAllSubMenus();
-  }
-
-  function onDragStart(event){
-    var x = event.touches ? event.touches[0].pageX : event.clientX;
-    var y = event.touches ? event.touches[0].pageY : event.clientY;
-    coordinates.draggingX = coordinates.beforeDragX;
-    coordinates.draggingY = coordinates.beforeDragY;
-    coordinates.clientStartX = x;
-    coordinates.clientStartY = y;
-    document.addEventListener('mouseup', onDragEnd);
-    document.addEventListener('touchend', onDragEnd);
-    document.addEventListener('mousemove', onDragMove);
-    document.addEventListener('touchmove', onDragMove);
-    event.preventDefault();
-  }
-  function onDragMove(event){
-    var x = event.touches ? event.touches[0].pageX : event.clientX;
-    var y = event.touches ? event.touches[0].pageY : event.clientY;
-    coordinates.draggingX = coordinates.beforeDragX + (x - coordinates.clientStartX);
-    coordinates.draggingY = coordinates.beforeDragY + (y - coordinates.clientStartY);
-    whole_element.style.left = String(coordinates.draggingX) + 'px';
-    whole_element.style.top = String(coordinates.draggingY) + 'px';
-    fRemoveAllSubMenus();
-  }
-  function onDragEnd(event){
-    coordinates.beforeDragX = coordinates.draggingX;
-    coordinates.beforeDragY = coordinates.draggingY;
-    document.removeEventListener('mouseup', onDragEnd);
-    document.removeEventListener('touchend', onDragEnd);
-    document.removeEventListener('mousemove', onDragMove);
-    document.removeEventListener('touchmove', onDragMove);
-  }
-
-  function fRemoveAllSubMenus() { fRemoveSubMenusUntil(0); }
-  function fRemoveSubMenusUntil(i) { var item; while (sub_menu_elements.length > i && (item = sub_menu_elements.pop())) item.remove(); }
-  function fCreateSubMenu(path, x, y){
-    sul = document.createElement('ul');
-    sul.style.all = 'initial';
-    sul.style.cssText += theme.sub_menu;
-    if (original_focus) {
-      text_cursor[0] = original_focus.selectionStart;
-      text_cursor[1] = original_focus.selectionEnd;
-    }
-    if (text_cursor[0] != null) {
-      original_focus.focus();
-    }
-    if (path.length === 1 && path[0] === language) {
-      for (item_key in library)
-        if (item_key !== language) {
-          var li = fCreateSubMenuItem(path, item_key, theme.sub_menu_lang, theme.sub_menu_item_hover);
-          sul.appendChild(li);
-        }
-    } else {
-      var sub_menu = library[language];
-      for (var i = 0; i < path.length; i++){
-        sub_menu = sub_menu[path[i]];
-      }
-      for (var item_key in sub_menu)
-        sul.appendChild(fCreateSubMenuItem(path, item_key, theme.sub_menu_item, theme.sub_menu_item_hover));
-    }
-    sub_menu_elements.push(whole_element.appendChild(sul));
-    sul.style.top = y + 'px';
-    sul.style.left = (path.length === 1 ? x - sul.offsetWidth / 2 : x) + 'px';
-  }
-  function fCreateSubMenuItem(path, item_key, style, style_hover){
-    var li = document.createElement('li');
-    li.my_path = path.concat([item_key]);
-    li.my_style = style;
-    li.my_style_hover = style + style_hover;
-    li.innerHTML = item_key;
-    li.style.all = 'initial';
-    li.style.cssText += style;
-    li.addEventListener('mouseover', function(event) {
-      fRemoveSubMenusUntil(this.my_path.length - 1);
-      this.style.all = 'initial';
-      this.style.cssText += this.my_style_hover;
-      onAnythingHover();
-      var ref = library[language];
-      if (!(this.my_path.length === 2 && this.my_path[0] === language)) {
-        for (var i = 0; i < this.my_path.length; i++)
-          ref = ref[this.my_path[i]];
-        if (typeof ref === 'object')
-          fCreateSubMenu(this.my_path, this.parentElement.offsetLeft + this.offsetLeft + this.offsetWidth - 1, this.parentElement.offsetTop + this.offsetTop);
-      }
+    window.addEventListener("message", e => {
+      console.log(e.data.msg);
+      od && e.data.cs && e.data.th && (coder(e.data.cs && e.data.th), fr.remove());
     });
-    li.addEventListener('mouseup', function(event) {
-      if (this.my_path.length === 2 && this.my_path[0] === language) {
-        original_focus.focus();
-        fUpdateMenu(this.my_path[1]);
-      } else {
-        var ref = library[language];
-        for (var i = 0; i < this.my_path.length; i++)
-          ref = ref[this.my_path[i]];
-        if (typeof ref === 'string' && !editor_mode)
-            fInsertScript(ref);
-      }
-    });
-    li.addEventListener('mouseleave', function(event) { this.style.all = 'initial'; this.style.cssText += this.my_style; });
-    return li;
-  }
-
-  function fUpdateMenu(switch_language = null){
-    if (switch_language)
-      language = switch_language;
-    with (whole_element) { while (hasChildNodes()) { removeChild(lastChild); } }
-
-    var ul = document.createElement('ul');
-    ul.style.position = 'absolute';
-    ul.style.all = 'initial';
-    ul.style.cssText += theme.menu;
-
-    var li = document.createElement('li');
-    li.innerHTML = ['→', '←'][is_expended];
-    li.style.all = 'initial';
-    li.style.cssText += theme.menu_collapse;
-    li.addEventListener('mouseover', function(event) {this.style.all = 'initial'; this.style.cssText += theme.menu_collapse + theme.menu_collapse_hover;onAnythingHover();fRemoveAllSubMenus();});
-    li.addEventListener('mouseup', function(event) {if (coordinates.beforeDragX == coordinates.draggingX && coordinates.beforeDragY == coordinates.draggingY) {is_expended = [1, 0][is_expended]; fUpdateMenu(null);} if (original_focus) {original_focus.focus();}});
-    li.addEventListener('touchend', function(event) {if (coordinates.beforeDragX == coordinates.draggingX && coordinates.beforeDragY == coordinates.draggingY) {is_expended = [1, 0][is_expended]; fUpdateMenu(null);} if (original_focus) {original_focus.focus();}});
-    li.addEventListener('mouseleave', function(event) {this.style.all = 'initial'; this.style.cssText += theme.menu_collapse;});
-    if (!editor_mode) {
-      li.addEventListener('mousedown', function(event) {onDragStart(event);});
-      li.addEventListener('touchstart', function(event) {onDragStart(event);});
-    }
-    ul.appendChild(li);
-    if (is_expended) {
-      ul.appendChild(fCreateMenuItem(language, theme.menu_lang, theme.menu_item_hover));
-      for (var key in library[language])
-        ul.appendChild(fCreateMenuItem(key, theme.menu_item, theme.menu_item_hover));
-      if (!editor_mode) {
-        var li_edit = fCreateMenuItem('✎', theme.menu_item, theme.menu_item_hover);
-        li_edit.addEventListener('mouseup', function(event) {if (coordinates.beforeDragX == coordinates.draggingX && coordinates.beforeDragY == coordinates.draggingY) { fEditPanel(); } if (original_focus) {original_focus.focus();}});
-        li_edit.addEventListener('touchend', function(event) {if (coordinates.beforeDragX == coordinates.draggingX && coordinates.beforeDragY == coordinates.draggingY) { fEditPanel(); } if (original_focus) {original_focus.focus();}});
-        ul.appendChild(li_edit);
-        var li_close = fCreateMenuItem('❌', theme.menu_item, theme.menu_item_hover);
-        li_close.addEventListener('mouseup', function(event) {if (coordinates.beforeDragX == coordinates.draggingX && coordinates.beforeDragY == coordinates.draggingY) { whole_element.remove(); } if (original_focus) {original_focus.focus();}});
-        li_close.addEventListener('touchend', function(event) {if (coordinates.beforeDragX == coordinates.draggingX && coordinates.beforeDragY == coordinates.draggingY) { whole_element.remove(); } if (original_focus) {original_focus.focus();}});
-        ul.appendChild(li_close);
-      }
-    }
-    whole_element.appendChild(ul);
-  }
-  function fCreateMenuItem(key, style, style_hover) {
-    var li = document.createElement('li');
-    li.my_key = key;
-    li.innerHTML = key;
-    li.my_style = style;
-    li.my_style_hover = style + style_hover;
-    li.style.all = 'initial';
-    li.style.cssText += style;
-    li.addEventListener('mouseover', function(event) {this.style.all = 'initial'; this.style.cssText += this.my_style_hover;onAnythingHover();fRemoveAllSubMenus();fCreateSubMenu([this.my_key], this.offsetLeft + this.offsetWidth / 2, this.style.height)});
-    li.addEventListener('mouseup', function(event) {if (coordinates.beforeDragX != coordinates.draggingX || coordinates.beforeDragY != coordinates.draggingY) fCreateSubMenu([this.my_key], this.offsetLeft + this.offsetWidth / 2, this.style.height)});
-    li.addEventListener('mouseleave', function(event) {this.style.all = 'initial'; this.style.cssText += this.my_style;});
-    if (!editor_mode) {
-      li.addEventListener('mousedown', function(event) {onDragStart(event);});
-      li.addEventListener('touchstart', function(event) {onDragStart(event); fCreateSubMenu([this.my_key], this.offsetLeft + this.offsetWidth / 2, this.style.height)});
-    }
-    return li;
-  }
-
-  function fEditPanel() {
-    var background = document.createElement('div');
-    background.style.all = 'initial';
-    background.style.cssText += 'z-index: 2147483647; background: #000000; position: fixed; left: 0; top: 0; bottom: 0; right: 0; opacity: 0.5;';
-    var editor = document.createElement('iframe');
-    editor.src = 'https://knyipab.github.io/Code-Library/editor/';
-    editor.style.all = 'initial';
-    editor.style.cssText += 'z-index: 2147483647; background: #FFFFFF; position: fixed; left: 10%; top: 10%; width: 80%; height: 80%;';
-    editor.onload = function() { editor.contentWindow.postMessage({library: library, current_theme: current_theme, x_pos: coordinates.beforeDragX, y_pos: coordinates.beforeDragY}, '*'); };
-    background.addEventListener('mouseup', function () {editor.remove(); background.remove()});
-    background.addEventListener('touchend', function () {editor.remove(); background.remove()});
-
-    parent.appendChild(background);
-    parent.appendChild(editor);
-  }
-
-  function fCreateWholeElement() {
-    whole_element = parent.appendChild(document.createElement('div'));
-    whole_element.style.all = 'initial';
-    whole_element.style.cssText += theme.whole_element;
-    if (editor_mode)
-      whole_element.style.position = 'initial';
-    whole_element.style.left = coordinates.beforeDragX + 'px';
-    whole_element.style.top = coordinates.beforeDragY + 'px';
-    whole_element.addEventListener('mouseleave', function(event) {fRemoveAllSubMenus();});
-    fUpdateMenu(language);
-  }
-
-  fCreateWholeElement();
-
-  })(${parent},${editor_mode});`;
+    /******************
+     *  coder(cs, th) *
+     ******************/
+    function coder(cs, th) {
+      var
+      /* st = style set */
+      st = (x, h) => { for (i in x) {x[i].style.all = 'initial'; x[i].style.cssText += th[i] + (h?th[i+'h']:''); } },
+      /**
+       * fo = focus, sf = set focus, ca = cursor begin (A), cb = cursor end (B)
+       * uc = update cursor, us = update selection
+       * ax = clientStartX, ay = clientStartY, bx = beforeDragX, by = beforeDragY
+       * dx = draggingX, dy = draggingY, xy = get mouse client X Y
+       */
+      fo, ca, cb, 
+      sf = _ => fo = document.activeElement, 
+      uc = _ => [ca, cb] = [fo.selectionStart, fo.selectionEnd], 
+      us = x => fo.selectionStart = fo.selectionEnd = x ,
+      ax = 0, ay = 0, bx = `+x+`, by = `+y+`, dx = 0, dy = 0, 
+      xy = e => (t = e.touches) ? [t.pageX, t.pageY] : [e.clientX, e.clientY], 
+      /* df = is defined?, de = document.addEventListener, dr = document.removeEventListener */
+      df = x => window.hasOwnProperty(x), 
+      de = (...x) => el(document, ...x), 
+      dr = (...x) => {var f = x.pop(); x.map(i => document.removeEventListener(i, f)); }, 
+      /* pa = path resolves, ie = isExpanded, pl = choice of programming langauge */
+      pa = p => p.reduce((o, i) => o[i], cs[pl]),
+      ie = 1, we, se = [],
+      pl = Object.keys(cs)[0], 
+      /**
+       * ods = onDragStart, odm = onDragMove, ode = onDragEnd
+       */
+      ods = e => {
+        dx = bx; dy = by; [ax, ay] = xy(e);
+        de('mouseup', 'touchend', ode);
+        de('mousemove', 'touchmove', odm);
+        e.preventDefault();
+      }, odm = e => {
+        var [x, y] = xy(e);
+        dx = bx + (x - ax); dy = by + (y - ay);
+        as(we, {left: dx+'px', top: dy+'px'});
+        frs(0);
+      }, ode = _ => {
+        bx = dx; by = dy;
+        dr('mouseup', 'touchend', ode);
+        dr('mousemove', 'touchmove', odm);
+      }, 
+      /**
+       * fis = insert snippet, frs = remove se
+       */
+      fis = s => {
+        fo && fo.selectionStart && uc();
+        if (ca != null) {
+          fo.focus();
+          if (df('colab') && (c = colab.global.notebook.focusedCell)) {
+            var t = c.getText(), o = c.editor.getOffsetAt(c.editor.getCursor());
+            c.setText(t.substr(0, o) + s + t.substr(o + cb - ca));
+            c.editor.setCursor(c.editor.getPositionAt(o + s.length));
+          } else if (df('$RStudio')) {
+            try {ace.edit($RStudio.last_focused_editor_id).insertSnippet(s);} catch {}
+          } else {
+            us(ca + (fo.value = s).length);
+          }
+        }
+        frs(0);
+      }, frs = i => { while (se.length > i) se.pop().remove(); } ,
+      /**
+       * fme, fmi, fsm, fsi correspond to me, mi, sm, si
+       */
+      fsm = (p, xy)=>{
+        var sm = ce('ul'); st({sm});
+        fo && uc();
+        if (ca != null) fo.focus();
+        (p.length === 1 && p[0] === pl)
+        ? ok(cs).map(k => k !== pl && ac(sm, fsi(p, k, 'sl')))
+        : ok(pa(p)).map(k => ac(sm, fsi(p, k)));
+        se.push(ac(we, sm));
+        as(sm, {top: xy[1]+'px', left: xy[0]+'px'});
+      }, fsi = (p, k, s='si')=>{
+        var si = ce('li'); st({[s]:si}); si.innerHTML = k;
+        el(si, 'mouseover', _ => {
+          frs(p.length);
+          st({[s]:si},1);
+          sf();
+          (!(p.length === 1 && p[0] === pl)) && (o = pa(p)[k]) && typeof o === 'object' &&
+          fsm(p.concat([k]), [si.parentElement.offsetLeft + si.offsetLeft + si.offsetWidth - 1, si.parentElement.offsetTop + si.offsetTop]);
+        });
+        el(si, 'mouseup', _ => (p.length === 1 && p[0] === pl)
+          ? (fo.focus(), fme(k)) : (o = pa(p)[k]) && typeof o === 'string'  && !em && fis(o)
+        );
+        el(si, 'mouseleave', _ => st({[s]:si}) );
+        return si;
+      }, fme = (l = pl) => {
+        pl = l;
+        while (we.hasChildNodes()) we.removeChild(we.lastChild);
+    
+        var me = ce('ul'), mc = ce('li'), 
+        f = (a) => (bx == dx && by == dy && a(), fo && fo.focus());
+        st({me, mc});
+        mc.innerHTML = ['→', '←'][ie];
+        el(mc, 'mouseover', _ => {st({mc},1); sf(); frs(0);});
+        el(mc, 'mouseup', 'touchend', _ => f(_ => {ie = [1, 0][ie]; fme();}));
+        el(mc, 'mouseleave', _ => st({mc}));
+        !em && el(mc, 'mousedown', 'touchstart', ods);
+        ac(me, mc);
+        if (ie) {
+          ac(me, fmi(pl, 'ml'));
+          for (var k in cs[pl]) ac(me, fmi(k));
+          if (!em) {
+            var le = fmi('✎'), lc = fmi('❌');
+            el(le, 'mouseup', 'touchend', _ => f(fed) );
+            el(lc, 'mouseup', 'touchend', _ => f(we.remove.bind(we)) );
+            ac(me, le); ac(me, lc);
+          }
+        }
+        ac(we, me);
+      }, fmi = (k, s='mi') => {
+        var li = ce('li'), f = _ => fsm([k], [li.offsetLeft, li.style.height]);
+        st({[s]:li});
+        li.innerHTML = k;
+        el(li, 'mouseover', _ => {st({[s]:li},1); sf(); frs(0); f(); });
+        el(li, 'mouseup', _ => (bx != dx || by != dy) && f() );
+        el(li, 'mouseleave', _ => st({[s]:li}) );
+        if (!em) {
+          el(li, 'mousedown', ods);
+          el(li, 'touchstart', e => {ods(e); f(); });
+        }
+        return li;
+      }, 
+      /**
+       * fed = initialize editor
+       */
+      fed = _ => {
+        var a = [bg, ed, ex] = pe('div', 'iframe', 'div'); st({bg, ed, ex});
+        ed.onload = _ => { ed.contentWindow.postMessage({cs, thn, bx, by}, '*'); };
+        ed.src = 'https://knyipab.github.io/Code-Library/editor/';
+        ex.innerHTML = '❌';
+        [bg, ex].map(i => el(i, 'mouseup', 'touchend', _ => a.map(i => i.remove())));
+      };
+  
+      /**
+       * init coder
+       */
+      var [we] = pe('div'); st({we});
+      as(we, {left: bx+'px', top: by+'px'});
+      `+(em?"we.style.position = '';":'')+`
+      el(we, 'mouseleave', _ => frs(0));
+      fme();
+    };
+  })();
+  //`).replaceAll(/[\n\t]/g, '').replaceAll(/\/\*.*?\*\//g, '').replaceAll(/\s+/g, ' ');
 }
 
 
 
 window.addEventListener("message", function(event) {
   console.log(event.data);
-  if (event.data.library)
-    library = event.data.library;
-  if (event.data.current_theme)
-    current_theme = event.data.current_theme;
-  if (event.data.x_pos)
-    x_pos = event.data.x_pos;
-  if (event.data.y_pos)
-    y_pos = event.data.y_pos;
+  // read message from coder.js
+  if (event.data.cs)              library = event.data.cs;
+  if (event.data.thn)             current_theme = event.data.thn;
+  if (event.data.bx)              x_pos = event.data.bx;
+  if (event.data.by)              y_pos = event.data.by;
+  if (event.data.od)              online_data = event.data.od;
+  if (event.data.os)              online_settings = event.data.os;
+  // earlier version compatibility
+  if (event.data.library)         library = event.data.library;
+  if (event.data.current_theme)   current_theme = event.data.current_theme;
+  if (event.data.x_pos)           x_pos = event.data.x_pos;
+  if (event.data.y_pos)           y_pos = event.data.y_pos;
+  event.source.postMessage({msg: 'code.js configuration loaded. '}, '*');
 
   fInit();
   document.getElementById('theme_select_box').value = current_theme;
 }, false);
 
-if (typeof current_theme === 'undefined')
-  current_theme = Object.keys(themes)[0];
-if (typeof x_pos === 'undefined')
-  x_pos = 0;
-if (typeof y_pos === 'undefined')
-  y_pos = 0;
+if (typeof current_theme === 'undefined')   current_theme = Object.keys(themes)[0];
+if (typeof x_pos === 'undefined')           x_pos = 0;
+if (typeof y_pos === 'undefined')           y_pos = 0;
+if (typeof online_data === 'undefined')     online_data = false;
+if (typeof online_settings === 'undefined') online_settings = {
+  url: 'https://knyipab.github.io/Code-Library/editor/data', 
+  git: {}
+};
 
 function fThemeSelect(theme, parent, initialization) {
   current_theme = theme;
   var parent = document.getElementById('theme_demo');
   if (!initialization)
     document.getElementById('theme_demo').lastChild.remove();
-  eval(fFormat(JSON.stringify({
-    '<div style="width: 40px; height: 40px; padding: 10px;">🌐</div>': {
-      'Item 1': {'Folder': {'Item 1': 'demo_code', 'Item 2': 'demo_code'}, 'Item': 'demo_code'},
-      'Item 2': {'Item': 'demo_code'},
-      'Item 3': {'Item': 'demo_code'}
-    },
-    '<div style="width: 40px; height: 40px; padding: 10px;">📙</div>': {
-      'Item A': {'Folder': {'Item A': 'demo_code', 'Item B': 'demo_code'}, 'Item': 'demo_code'},
-      'Item B': {'Item': 'demo_code'},
-      'Item C': {'Item': 'demo_code'}
-    }
-  }), theme, 0, 48, 'parent', true));
+  eval(fFormat(library_demo, theme, 0, 48, 'parent', true));
 }
 
 function fExport() {
@@ -316,8 +232,8 @@ function fExport() {
   setTimeout(() => document.getElementById('output').style.display = "inline-block", 200);
   setTimeout(() => document.getElementById('output').style.display = "none", 300);
   setTimeout(() => document.getElementById('output').style.display = "inline-block", 400);
-  var url = fFormat(JSON.stringify(editor.get()), current_theme, x_pos, y_pos, 'document.body', false);
-  document.getElementById('output_url').href = url;
+  document.getElementById('output_url').href = fFormat(editor.get(), current_theme, x_pos, y_pos, 'document.body', false);
+  document.getElementById('output_url2').href = fFormat(editor.get(), current_theme, x_pos, y_pos, 'document.body', false, true, online_settings);
 }
 
 function fInit() {

@@ -1,0 +1,16 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <!-- when using the mode "code", it's important to specify charset utf-8 -->
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <script src="library.js"></script>
+    <script src="themes.js"></script>
+    <script>
+      window.addEventListener("message", function(event) {
+        event.source.postMessage({msg: 'library and themes JSON sent', cs: library, th: themes}, '*');
+      }, false);
+    </script>
+</head>
+<body style="background-color: #EEEEEE; ">
+</body>
+</html>
