@@ -8,10 +8,10 @@
     <script>
       var posted = false;
       window.addEventListener("message", function(event) {
-        if (!posted && event.data.thn) {
-          event.source.postMessage({msg: 'library and themes JSON sent', cs: library, th: themes[event.data.thn]}, '*');
+        //if (!posted && event.data.thn) {
+          event.source.postMessage({msg: 'library and themes JSON sent', cs: library, th: themes/*[event.data.thn]*/}, '*');
           posted = true;
-        }
+        //}
       }, false);
     </script>
 </head>
