@@ -152,7 +152,7 @@ function fFormat(cs, thn, x, y, pr, em, od=false, os={}) {
       fed = _ => {
         var a = [bg, ed, ex] = pe('div', 'iframe', 'div'); st({bg, ed, ex});
         ed.onload = _ => { ed.contentWindow.postMessage({cs, thn, bx, by}, '*'); };
-        ed.src = 'https://knyipab.github.io/Code-Library/editor/';
+        ed.src = 'https://knyipab.github.io/browserscript/coder/';
         ex.innerHTML = '❌';
         el(ex, 'mouseup', 'touchend', _ => a.map(i => i.remove()));
       };
@@ -195,7 +195,7 @@ if (typeof x_pos === 'undefined')           x_pos = 0;
 if (typeof y_pos === 'undefined')           y_pos = 0;
 if (typeof online_data === 'undefined')     online_data = false;
 if (typeof online_settings === 'undefined') online_settings = {
-  url: 'https://knyipab.github.io/Code-Library/editor/data', 
+  url: 'https://knyipab.github.io/browserscript/coder/data', 
   git: {}
 };
 
@@ -243,8 +243,8 @@ function fCopy() {
 function fExport() {
   document.getElementById('output').style.display = 'inline-block';
   for (let i = 0; i < 6; i++) { setTimeout(() => document.getElementById('output').style.display = i % 2 ? 'inline-block' : 'none', 100 * (i + 1)); }
-  document.getElementById('coder').href = fFormat(editor.get(), current_theme, x_pos, y_pos, 'document.body', false);
-  document.getElementById('coderX').href = fFormat(editor.get(), current_theme, x_pos, y_pos, 'document.body', false, true, online_settings);
+  document.getElementById('coderB').href = fFormat(editor.get(), current_theme, x_pos, y_pos, 'document.body', false);
+  document.getElementById('coderM').href = fFormat(editor.get(), current_theme, x_pos, y_pos, 'document.body', false, true, online_settings);
   document.getElementById('cs').href = URL.createObjectURL(new File([JSON.stringify(editor.get())], 'cs.json', {type: 'application/json'}));
 }
 
