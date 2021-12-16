@@ -19,24 +19,34 @@ function fFormat(cs, thn, x, y, pr, em, od=false, os={}) {
     /* oa = Object.assign(), ok = Object.keys() */
     oa = (x, y) => Object.assign(x, y), 
     ok = x => Object.keys(x?x:{});
-    /******************
-     * main - offline *
-     ******************/
-    !od && coder(`+(od?'{}':JSON.stringify(cs))+`, `+(od?'""':JSON.stringify(themes[thn]))+`);
-    /*****************
-     * main - online *
-     *****************/
-    if (od) {
-      fr = pe('iframe')[0];
-      as(fr, {display: 'none'});
-      fr.onload = _ => { fr.contentWindow.postMessage({thn}, '*'); };
-      fr.src = os.url;
+
+    function main() {
+      /******************
+       * main - offline *
+       ******************/
+      !od && coder(`+(od?'{}':JSON.stringify(cs))+`, `+(od?'""':JSON.stringify(themes[thn]))+`);
+      /*****************
+       * main - online *
+       *****************/
+      if (od) {
+        fr = pe('iframe')[0];
+        as(fr, {display: 'none'});
+        fr.onload = _ => { fr.contentWindow.postMessage({thn}, '*'); };
+        fr.src = os.url;
+      }
+      var oms = e => {
+        od && e.data.cs && e.data.th && (fr.remove(), coder(e.data.cs, e.data.th));
+        window.removeEventListener('message', oms);
+      };
+      window.addEventListener('message', oms);
     }
-    var oms = e => {
-      od && e.data.cs && e.data.th && (fr.remove(), coder(e.data.cs, e.data.th));
-      window.removeEventListener('message', oms);
-    };
-    window.addEventListener('message', oms);
+    main();
+    /********
+     * copy *
+     ********/
+    window.addEventListener('message', e => {
+      e.data && e.data.cmd === 'copy' && e.data.json instanceof String && navigator.clipboard.writeText(e.data.json);
+    });
     /******************
      *  coder(cs, th) *
      ******************/
@@ -105,6 +115,7 @@ function fFormat(cs, thn, x, y, pr, em, od=false, os={}) {
       /**
        * fme, fmi, fsm, fsi correspond to me, mi, sm, si
        */
+      lg = k => '<div style="width: 40px; height: 40px; background-image: url('+k+'); background-repeat: no-repeat; background-position: center; background-size: 24px;"></div>',
       fsm = (p, xy)=>{
         var sm = ce('ul'); st({sm});
         fo && uc();
@@ -115,7 +126,7 @@ function fFormat(cs, thn, x, y, pr, em, od=false, os={}) {
         se.push(ac(we, sm));
         as(sm, {top: xy[1]+'px', left: xy[0]+'px'});
       }, fsi = (p, k, s='si')=>{
-        var si = ce('li'); st({[s]:si}); si.innerHTML = k;
+        var si = ce('li'); st({[s]:si}); si.innerHTML = s == 'sl' ? lg(k) : k;
         el(si, 'mouseover', e => {
           st({[s]:si},1); sf(); frs(p.length); 
           (!(p.length === 1 && p[0] === pl)) && (o = pa(p)[k]) && typeof o === 'object' &&
@@ -140,7 +151,7 @@ function fFormat(cs, thn, x, y, pr, em, od=false, os={}) {
       }, fmi = (k, s='mi', g) => {
         var li = ce('li'), f = _ => fsm([k], [li.offsetLeft, li.style.height]);
         st({[s]:li});
-        li.innerHTML = k;
+        li.innerHTML = s == 'ml' ? lg(k) : k;
         el(li, 'mouseover', _ => {st({[s]:li},1); sf(); frs(0); f(); });
         el(li, 'mouseup', 'touchend', e => {g && g(); fo && fo.focus(); (((bx != dx || by != dy) && !e.touches) || (e.touches && bx == dx && by == dy)) && (frs(0), f()); } );
         el(li, 'mouseleave', _ => st({[s]:li}) );
@@ -171,7 +182,7 @@ function fFormat(cs, thn, x, y, pr, em, od=false, os={}) {
   //`).replaceAll(/[\n\t]/g, '').replaceAll(/\/\*.*?\*\//g, '').replaceAll(/\s+/g, ' ');
 }
 
-
+var source;
 window.addEventListener("message", function(event) {
   console.log(event.data);
   // read from coder.js postMessage
@@ -189,6 +200,7 @@ window.addEventListener("message", function(event) {
 
   fInit();
   document.getElementById('theme_select_box').value = current_theme;
+  source = event.source;
 }, false);
 
 if (typeof current_theme === 'undefined')   current_theme = Object.keys(themes)[0];
@@ -238,7 +250,9 @@ window.addEventListener('DOMContentLoaded', () => {
 
 
 function fCopy() {
-  navigator.clipboard.writeText(JSON.stringify(editor.get()));
+  var json = JSON.stringify(editor.get());
+  navigator.clipboard.writeText(json);
+  source && source.postMessage({cmd: 'copy', json: json}, '*');
 }
 
 function fExport() {

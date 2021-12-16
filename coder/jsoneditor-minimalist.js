@@ -9365,8 +9365,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    this._updateSchema();
 
-			if (typeof(fieldText) === 'string' && fieldText.slice(0, 4) === '<div' && this.getLevel() === 1)
-				domField.innerHTML = fieldText;
+			if (typeof(fieldText) === 'string' && fieldText.slice(0, 4) === 'http' && this.getLevel() === 1)
+				domField.innerHTML = `<div style="width: 40px; height: 40px; background-image: url(${fieldText}); background-repeat: no-repeat; background-position: center; background-size: 24px;"></div>`;
 	  }
 
 	  // apply value to DOM
@@ -9404,8 +9404,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    else {
 	      fieldText = '';
 	    }
-			if (typeof(fieldText) === 'string' && fieldText.slice(0, 4) === '<div' && this.getLevel() === 1)
-				domField.innerHTML = fieldText;
+			if (typeof(fieldText) === 'string' && fieldText.slice(0, 4) === 'http' && this.getLevel() === 1)
+				domField.innerHTML = `<div style="width: 40px; height: 40px; background-image: url(${fieldText}); background-repeat: no-repeat; background-position: center; background-size: 24px;"></div>`;;
 	  }
 
 	  // update childs indexes
@@ -9798,7 +9798,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  // field events
 	  var domField = dom.field;
-		if (target.parentElement == dom.field && this.field.slice(0, 4) === '<div' && this.getLevel() === 1)
+		if (target.parentElement == dom.field && this.field.slice(0, 4) === 'http' && this.getLevel() === 1)
 			target = target.parentElement;
 	  if (target == domField) {
 	    switch (type) {
@@ -9807,7 +9807,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this._getDomField(true);
 	        this._updateDomField();
 	        if (this.field) {
-	          domField.innerHTML = (this.field.slice(0, 4) === '<div' && this.getLevel() === 1) ? this.field : this._escapeHTML(this.field);
+	          domField.innerHTML = (this.field.slice(0, 4) === 'http' && this.getLevel() === 1) ? `<div style="width: 40px; height: 40px; background-image: url(${this.field}); background-repeat: no-repeat; background-position: center; background-size: 24px;"></div>` : this._escapeHTML(this.field);
 	        }
 	        break;
 
@@ -9820,7 +9820,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	      case 'keydown':
 	      case 'mousedown':
-	        if (this.field && domField.innerHTML.slice(0, 4) === '<div' && this.getLevel() === 1) {
+	        if (this.field && domField.innerHTML.slice(0, 4) === 'http' && this.getLevel() === 1) {
 	          domField.innerHTML = this._escapeHTML(this.field);
 						domField.focus();
 	        }
@@ -9840,7 +9840,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }, 1);
 	        break;
 				case 'focus':
-	        if (this.field && domField.innerHTML.slice(0, 4) === '<div' && this.getLevel() === 1) {
+	        if (this.field && domField.innerHTML.slice(0, 4) === 'http' && this.getLevel() === 1) {
 	          domField.innerHTML = this._escapeHTML(this.field);
 						domField.focus();
 	        }

@@ -26,23 +26,32 @@
     /* oa = Object.assign(), ok = Object.keys() */
     oa = (x, y) => Object.assign(x, y),
     ok = x => Object.keys(x?x:{});
-    console.log(pr);
-    /******************
-     * main - offline *
-     ******************/
-    !od && coder({}, "");
-    var th = {"sm":"position: absolute; box-shadow: 0 0 24px 0 rgba(0,0,0,0.2),0 0 77px 0 rgba(0,0,0,0.22); margin: 0px; padding: 0px; ","sl":"display: block; font-family: Calibri; font-size: 16px; color: #000000; background-color: #FFFFFF; text-align: center; padding: 0px; margin: 0px; border-bottom: solid #CCCCCC 1px; text-decoration: none; user-select: none; ","si":"display: block; font-family: Calibri; font-size: 16px; color: #000000; background-color: #FFFFFF; text-align: center; padding: 2px 8px 2px 8px; margin: 0px; border-bottom: solid #CCCCCC 1px; text-decoration: none; user-select: none; ","sih":"background-color: #AAAAAA; ","slh":"background-color: #AAAAAA; ","me":"left: 0; box-shadow: 0 0 24px 0 rgba(0,0,0,0.2),0 0 77px 0 rgba(0,0,0,0.22); margin: 0px; padding: 0px; display: table; ","mc":"display: block; font-family: Calibri; font-size: 16px; color: #000000; background-color: #AAAAAA; height: 40px; text-align: left; vertical-align: middle; padding: 0px 10px 0px 10px; boarder-left: solid #CCCCCC 0.25px; border-right: solid #CCCCCC 0.25px; text-decoration: none; margin: 0px; user-select: none; display: table-cell;","mch":"background-color: #606060; ","mi":"display: block; font-family: Calibri; font-size: 16px; color: #000000; background-color: #FFFFFF; height: 40px; text-align: left; vertical-align: middle; padding: 0px 10px 0px 10px; boarder-left: solid #CCCCCC 0.25px; border-right: solid #CCCCCC 0.25px; text-decoration: none; margin: 0px; user-select: none; display: table-cell;","ml":"display: block; font-family: Calibri; font-size: 16px; color: #000000; background-color: #FFFFFF; height: 40px; text-align: left; vertical-align: middle; padding: 0px; boarder-left: solid #CCCCCC 0.25px; border-right: solid #CCCCCC 0.25px; text-decoration: none; margin: 0px; user-select: none; display: table-cell;","mih":"background-color: #AAAAAA; ","mlh":"background-color: #AAAAAA; ","we":"position: fixed; z-index: 2147483647; margin: 0px; padding: 0px; ","bg":"z-index: 2147483647; background: #000000; position: fixed; left: 0; top: 0; bottom: 0; right: 0; opacity: 0.5;","ed":"z-index: 2147483647; background: #FFFFFF; position: fixed; left: 10%; top: 10%; width: 80%; height: 80%;","ex":"z-index: 2147483647; width: 40px; height: 40px; line-height: 40px; text-align: center; user-select: none; position: fixed; top: calc(10% - 20px); right: calc(10% - 20px); pointer-events: auto; background: #EEEEEE; border-radius: 50%;"};
-    /*****************
-     * main - online *
-     *****************/
-    GM_xmlhttpRequest({
-      method: "GET",
-      url: os.url,
-      onload: function(response) {
-        var data = JSON.parse(response.responseText);
-        console.log(data);
-        od && data && th && coder(data, th);
-      }
+
+    function main() {
+      /******************
+       * main - offline *
+       ******************/
+      !od && coder({}, "");
+      var th = {"sm":"position: absolute; box-shadow: 0 0 24px 0 rgba(0,0,0,0.2),0 0 77px 0 rgba(0,0,0,0.22); margin: 0px; padding: 0px; ","sl":"display: block; font-family: Calibri; font-size: 16px; color: #000000; background-color: #FFFFFF; text-align: center; padding: 0px; margin: 0px; border-bottom: solid #CCCCCC 1px; text-decoration: none; user-select: none; ","si":"display: block; font-family: Calibri; font-size: 16px; color: #000000; background-color: #FFFFFF; text-align: center; padding: 2px 8px 2px 8px; margin: 0px; border-bottom: solid #CCCCCC 1px; text-decoration: none; user-select: none; ","sih":"background-color: #AAAAAA; ","slh":"background-color: #AAAAAA; ","me":"left: 0; box-shadow: 0 0 24px 0 rgba(0,0,0,0.2),0 0 77px 0 rgba(0,0,0,0.22); margin: 0px; padding: 0px; display: table; ","mc":"display: block; font-family: Calibri; font-size: 16px; color: #000000; background-color: #AAAAAA; height: 40px; text-align: left; vertical-align: middle; padding: 0px 10px 0px 10px; boarder-left: solid #CCCCCC 0.25px; border-right: solid #CCCCCC 0.25px; text-decoration: none; margin: 0px; user-select: none; display: table-cell;","mch":"background-color: #606060; ","mi":"display: block; font-family: Calibri; font-size: 16px; color: #000000; background-color: #FFFFFF; height: 40px; text-align: left; vertical-align: middle; padding: 0px 10px 0px 10px; boarder-left: solid #CCCCCC 0.25px; border-right: solid #CCCCCC 0.25px; text-decoration: none; margin: 0px; user-select: none; display: table-cell;","ml":"display: block; font-family: Calibri; font-size: 16px; color: #000000; background-color: #FFFFFF; height: 40px; text-align: left; vertical-align: middle; padding: 0px; boarder-left: solid #CCCCCC 0.25px; border-right: solid #CCCCCC 0.25px; text-decoration: none; margin: 0px; user-select: none; display: table-cell;","mih":"background-color: #AAAAAA; ","mlh":"background-color: #AAAAAA; ","we":"position: fixed; z-index: 2147483647; margin: 0px; padding: 0px; ","bg":"z-index: 2147483647; background: #000000; position: fixed; left: 0; top: 0; bottom: 0; right: 0; opacity: 0.5;","ed":"z-index: 2147483647; background: #FFFFFF; position: fixed; left: 10%; top: 10%; width: 80%; height: 80%;","ex":"z-index: 2147483647; width: 40px; height: 40px; line-height: 40px; text-align: center; user-select: none; position: fixed; top: calc(10% - 20px); right: calc(10% - 20px); pointer-events: auto; background: #EEEEEE; border-radius: 50%;"};
+      /*****************
+       * main - online *
+       *****************/
+      GM_xmlhttpRequest({
+        method: "GET",
+        url: os.url,
+        onload: function(response) {
+          var data = JSON.parse(response.responseText);
+          console.log(data);
+          od && data && th && coder(data, th);
+        }
+      });
+    }
+    main();
+    /********
+     * copy *
+     ********/
+    window.addEventListener('message', e => {
+      e.data && e.data.cmd === 'copy' && e.data.json instanceof String && navigator.clipboard.writeText(e.data.json);
     });
     /******************
      *  coder(cs, th) *
@@ -112,6 +121,7 @@
       /**
        * fme, fmi, fsm, fsi correspond to me, mi, sm, si
        */
+      lg = k => '<div style="width: 40px; height: 40px; background-image: url('+k+'); background-repeat: no-repeat; background-position: center; background-size: 24px;"></div>', 
       fsm = (p, xy)=>{
         var sm = ce('ul'); st({sm});
         fo && uc();
@@ -122,7 +132,7 @@
         se.push(ac(we, sm));
         as(sm, {top: xy[1]+'px', left: xy[0]+'px'});
       }, fsi = (p, k, s='si')=>{
-        var si = ce('li'); st({[s]:si}); si.innerHTML = k;
+        var si = ce('li'); st({[s]:si}); si.innerHTML = s == 'sl' ? lg(k) : k;
         el(si, 'mouseover', _ => {
           frs(p.length);
           st({[s]:si},1);
@@ -152,17 +162,18 @@
           ac(me, fmi(pl, 'ml'));
           for (var k in cs[pl]) ac(me, fmi(k));
           if (!em) {
-            var le = fmi('✎'), lc = fmi('❌');
+            var le = fmi('✎'), lc = fmi('❌'), rf = fmi('🔄');
             el(le, 'mouseup', 'touchend', _ => f(fed) );
             el(lc, 'mouseup', 'touchend', _ => f(we.remove.bind(we)) );
-            ac(me, le); ac(me, lc);
+            el(rf, 'mouseup', 'touchend', _ => [f(main), f(we.remove.bind(we))] );
+            ac(me, le); ac(me, lc); ac(me, rf);
           }
         }
         ac(we, me);
       }, fmi = (k, s='mi') => {
         var li = ce('li'), f = _ => fsm([k], [li.offsetLeft, li.style.height]);
         st({[s]:li});
-        li.innerHTML = k;
+        li.innerHTML = s == 'ml' ? lg(k) : k;
         el(li, 'mouseover', _ => {st({[s]:li},1); sf(); frs(0); f(); });
         el(li, 'mouseup', _ => (bx != dx || by != dy) && f() );
         el(li, 'mouseleave', _ => st({[s]:li}) );
