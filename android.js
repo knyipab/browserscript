@@ -85,7 +85,7 @@
   document.addEventListener("mouseover",function(e){
       var t0 = e.target || e.srcElement, t = e.target || e.srcElement;
       while (t && !t.title && !(t instanceof HTMLAnchorElement)) { t = t.parentNode; }
-      if (t && t0.title || (t.title && t.closest && t.closest('a'))) {
+      if (t && t0.title || (t && t.title && t.closest && t.closest('a'))) {
           tooltip.innerHTML = t0.title || t.title;
           tooltip.style.display = 'block';
           tooltip.style.top = e.clientY + 5 + "px";

@@ -96,7 +96,8 @@ function fFormat(cs, thn, x, y, pr, em, od=false, os={}) {
           } else if (df('$RStudio')) {
             try {ace.edit($RStudio.last_focused_editor_id).insertSnippet(s);} catch {}
           } else {
-            us(ca + (fo.value = s).length);
+            /*us(ca + (fo.value = s).length);*/
+            document.execCommand('insertText', false, s);
           }
         }
         frs(0);
@@ -237,7 +238,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 
 function fCopy() {
-  navigator.clipboard.write(JSON.stringify(editor.get()));
+  navigator.clipboard.writeText(JSON.stringify(editor.get()));
 }
 
 function fExport() {
