@@ -247,6 +247,7 @@ function fExport() {
   document.getElementById('coderB').href = fFormat(editor.get(), current_theme, x_pos, y_pos, 'document.body', false);
   document.getElementById('coderM').href = fFormat(editor.get(), current_theme, x_pos, y_pos, 'document.body', false, true, online_settings);
   document.getElementById('cs').href = URL.createObjectURL(new File([JSON.stringify(editor.get())], 'cs.json', {type: 'application/json'}));
+  document.querySelector("#tbox").value = JSON.stringify(editor.get());
 }
 
 function fInit() {
