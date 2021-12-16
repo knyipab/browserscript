@@ -16,9 +16,11 @@
   <!-- Left portion -->
   <ul>
     <li style="float: left; padding: 8px;"><p style="font-size: 24px;"><b>Code Library</b> Bookmarklet Editor</p></li>
+    <!--
     <li style="width: 15%;"><p>&nbsp</p></li>
     <li><a href="#">Help</a></li>
     <li><a href="#">What is Code Library?</a></li>
+    -->
   </ul>
   <!-- Left portion -->
   <div class="column" style="width: 85%; position: fixed; height: 100%">
@@ -34,13 +36,14 @@
         <div id="theme_demo" style="padding:15px;"> </div>
       </div>
       <div class="column2" style="width: calc(100% - 300px); height: 150px; ">
-        <button class="button" style="width: 45%; height: 70%; margin: 2%; display: inline-block; " onclick="fExport()" >Export</button>
+        <button class="button" style="width: 20%; height: 70%; margin: 2%; display: inline-block; " onclick="fCopy()" >Copy</button>
+        <button class="button" style="width: 25%; height: 70%; margin: 2%; display: inline-block; " onclick="fExport()" >Export</button>
         <div id="output" style="width: 45%; height: 70%; margin: 0%; display: none; text-align: center; ">
           <span style="display: inline-block; vertical-align: middle;">
-            <a id="output_url" href="">coder.js</a>
-            <a id="output_url2" href="">coderX.js</a>
-            <p>↑</p>
-            <p>Save/Drag this link as/to bookmark</p>
+            <a id="coder" href="">coder.js</a>
+            <a id="coderX" href="">coderX.js</a>
+            <p>↑↑ Drag to bookmark ↑↑</p>
+            <a id="cs" href="" target="_blank" download='cs.json'>cs.json</a>
           </span>
         </div>
       </div>
@@ -49,6 +52,10 @@
   <!-- Adversiting -->
   <div style="left: 85%; width: 15%; height: 100%; position: fixed; background-color: grey;">
     <p style="text-align: center; color: white; user-select: none;">Advertising</p>
+  </div>
+  <!-- Drag and Drop -->
+  <div id="drag" style="z-index: 2147483647; background: #000000; position: fixed; left: 0; top: 0; bottom: 0; right: 0; opacity: 0.5; display: none;">
+  <p style="position: absolute;top: 50%; left: 50%; transform: translate(-50%, -50%);font-size: 100px; text-align: center; color: #FFFFFF; vertical-align: middle; ">⬆️</p>
   </div>
 </body>
 </html>

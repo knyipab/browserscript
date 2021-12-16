@@ -19,7 +19,6 @@ function fFormat(cs, thn, x, y, pr, em, od=false, os={}) {
     /* oa = Object.assign(), ok = Object.keys() */
     oa = (x, y) => Object.assign(x, y), 
     ok = x => Object.keys(x?x:{});
-    console.log(pr);
     /******************
      * main - offline *
      ******************/
@@ -34,7 +33,6 @@ function fFormat(cs, thn, x, y, pr, em, od=false, os={}) {
       fr.src = os.url;
     }
     var oms = e => {
-      console.log(e.data);
       od && e.data.cs && e.data.th && (fr.remove(), coder(e.data.cs, e.data.th));
       window.removeEventListener('message', oms);
     };
@@ -57,7 +55,7 @@ function fFormat(cs, thn, x, y, pr, em, od=false, os={}) {
       uc = _ => [ca, cb] = [fo.selectionStart, fo.selectionEnd], 
       us = x => fo.selectionStart = fo.selectionEnd = x ,
       ax = 0, ay = 0, bx = `+x+`, by = `+y+`, dx = 0, dy = 0, 
-      xy = e => (t = e.touches) ? [t.pageX, t.pageY] : [e.clientX, e.clientY], 
+      xy = e => (t = e.touches) ? [t[0].pageX, t[0].pageY] : [e.clientX, e.clientY], 
       /* df = is defined?, de = document.addEventListener, dr = document.removeEventListener */
       df = x => window.hasOwnProperty(x), 
       de = (...x) => el(document, ...x), 
@@ -70,7 +68,7 @@ function fFormat(cs, thn, x, y, pr, em, od=false, os={}) {
        * ods = onDragStart, odm = onDragMove, ode = onDragEnd
        */
       ods = e => {
-        dx = bx; dy = by; [ax, ay] = xy(e);
+        sf(); dx = bx; dy = by; [ax, ay] = xy(e);
         de('mouseup', 'touchend', ode);
         de('mousemove', 'touchmove', odm);
         e.preventDefault();
@@ -78,7 +76,7 @@ function fFormat(cs, thn, x, y, pr, em, od=false, os={}) {
         var [x, y] = xy(e);
         dx = bx + (x - ax); dy = by + (y - ay);
         as(we, {left: dx+'px', top: dy+'px'});
-        frs(0);
+        !e.touches && frs(0);
       }, ode = _ => {
         bx = dx; by = dy;
         dr('mouseup', 'touchend', ode);
@@ -117,53 +115,35 @@ function fFormat(cs, thn, x, y, pr, em, od=false, os={}) {
         as(sm, {top: xy[1]+'px', left: xy[0]+'px'});
       }, fsi = (p, k, s='si')=>{
         var si = ce('li'); st({[s]:si}); si.innerHTML = k;
-        el(si, 'mouseover', _ => {
-          frs(p.length);
-          st({[s]:si},1);
-          sf();
+        el(si, 'mouseover', e => {
+          st({[s]:si},1); sf(); frs(p.length); 
           (!(p.length === 1 && p[0] === pl)) && (o = pa(p)[k]) && typeof o === 'object' &&
           fsm(p.concat([k]), [si.parentElement.offsetLeft + si.offsetLeft + si.offsetWidth - 1, si.parentElement.offsetTop + si.offsetTop]);
         });
-        el(si, 'mouseup', _ => (p.length === 1 && p[0] === pl)
-          ? (fo.focus(), fme(k)) : (o = pa(p)[k]) && typeof o === 'string'  && !em && fis(o)
+        el(si, 'mouseup', 'touchend', e => { fo && fo.focus(); (p.length === 1 && p[0] === pl)
+          ? (fo.focus(), fme(k)) : (o = pa(p)[k]) && typeof o === 'string' && !em && fis(o); }
         );
         el(si, 'mouseleave', _ => st({[s]:si}) );
+        el(si, 'mousedown', 'touchstart', _ => sf());
         return si;
       }, fme = (l = pl) => {
-        pl = l;
-        while (we.hasChildNodes()) we.removeChild(we.lastChild);
-    
-        var me = ce('ul'), mc = ce('li'), 
-        f = (a) => (bx == dx && by == dy && a(), fo && fo.focus());
-        st({me, mc});
-        mc.innerHTML = ['→', '←'][ie];
-        el(mc, 'mouseover', _ => {st({mc},1); sf(); frs(0);});
-        el(mc, 'mouseup', 'touchend', _ => f(_ => {ie = [1, 0][ie]; fme();}));
-        el(mc, 'mouseleave', _ => st({mc}));
-        !em && el(mc, 'mousedown', 'touchstart', ods);
-        ac(me, mc);
+        pl = l; we.innerHTML = '';
+        var me = ce('ul'); st({me});
+        ac(me, fmi(['→', '←'][ie], 'mc', _ => {ie = [1, 0][ie]; fme();}));
         if (ie) {
           ac(me, fmi(pl, 'ml'));
           for (var k in cs[pl]) ac(me, fmi(k));
-          if (!em) {
-            var le = fmi('✎'), lc = fmi('❌');
-            el(le, 'mouseup', 'touchend', _ => f(fed) );
-            el(lc, 'mouseup', 'touchend', _ => f(we.remove.bind(we)) );
-            ac(me, le); ac(me, lc);
-          }
+          !em && ac(me, fmi('✎', 'mi', fed)) && ac(me, fmi('❌', 'mi', _ => we.remove()));
         }
         ac(we, me);
-      }, fmi = (k, s='mi') => {
+      }, fmi = (k, s='mi', g) => {
         var li = ce('li'), f = _ => fsm([k], [li.offsetLeft, li.style.height]);
         st({[s]:li});
         li.innerHTML = k;
         el(li, 'mouseover', _ => {st({[s]:li},1); sf(); frs(0); f(); });
-        el(li, 'mouseup', _ => (bx != dx || by != dy) && f() );
+        el(li, 'mouseup', 'touchend', e => {g && g(); fo && fo.focus(); (((bx != dx || by != dy) && !e.touches) || (e.touches && bx == dx && by == dy)) && (frs(0), f()); } );
         el(li, 'mouseleave', _ => st({[s]:li}) );
-        if (!em) {
-          el(li, 'mousedown', ods);
-          el(li, 'touchstart', e => {ods(e); f(); });
-        }
+        !em && el(li, 'mousedown', 'touchstart', ods);
         return li;
       }, 
       /**
@@ -174,7 +154,7 @@ function fFormat(cs, thn, x, y, pr, em, od=false, os={}) {
         ed.onload = _ => { ed.contentWindow.postMessage({cs, thn, bx, by}, '*'); };
         ed.src = 'https://knyipab.github.io/Code-Library/editor/';
         ex.innerHTML = '❌';
-        [bg, ex].map(i => el(i, 'mouseup', 'touchend', _ => a.map(i => i.remove())));
+        el(ex, 'mouseup', 'touchend', _ => a.map(i => i.remove()));
       };
   
       /**
@@ -193,14 +173,14 @@ function fFormat(cs, thn, x, y, pr, em, od=false, os={}) {
 
 window.addEventListener("message", function(event) {
   console.log(event.data);
-  // read message from coder.js
+  // read from coder.js postMessage
   if (event.data.cs)              library = event.data.cs;
   if (event.data.thn)             current_theme = event.data.thn;
   if (event.data.bx)              x_pos = event.data.bx;
   if (event.data.by)              y_pos = event.data.by;
   if (event.data.od)              online_data = event.data.od;
   if (event.data.os)              online_settings = event.data.os;
-  // earlier version compatibility
+  // backward compatibility
   if (event.data.library)         library = event.data.library;
   if (event.data.current_theme)   current_theme = event.data.current_theme;
   if (event.data.x_pos)           x_pos = event.data.x_pos;
@@ -227,14 +207,45 @@ function fThemeSelect(theme, parent, initialization) {
   eval(fFormat(library_demo, theme, 0, 48, 'parent', true));
 }
 
+// Drag and drop JSON
+var dragcounter = 0;
+window.addEventListener('DOMContentLoaded', () => {
+  window.addEventListener('dragover', e => e.preventDefault());
+  ['dragenter'].forEach(t => window.addEventListener(t, e => {
+    e.preventDefault();
+    dragcounter++;
+    document.getElementById('drag').style.display = 'inline';
+  }));
+  ['dragleave', 'drop'].forEach(t => window.addEventListener(t, e => {
+    e.preventDefault();
+    dragcounter--;
+    if (dragcounter == 0) {
+      document.getElementById('drag').style.display = 'none';
+    }
+  }));
+  window.addEventListener('drop', async e => {
+    e.preventDefault();
+    if (e.dataTransfer.items[0].kind === 'file') {
+      const text = await e.dataTransfer.items[0].getAsFile().text();
+      try {
+        library = JSON.parse(text);
+        editor.set(library);
+      } catch {}
+    }
+  });
+});
+
+
+function fCopy() {
+  navigator.clipboard.write(JSON.stringify(editor.get()));
+}
+
 function fExport() {
   document.getElementById('output').style.display = 'inline-block';
-  setTimeout(() => document.getElementById('output').style.display = "none", 100);
-  setTimeout(() => document.getElementById('output').style.display = "inline-block", 200);
-  setTimeout(() => document.getElementById('output').style.display = "none", 300);
-  setTimeout(() => document.getElementById('output').style.display = "inline-block", 400);
-  document.getElementById('output_url').href = fFormat(editor.get(), current_theme, x_pos, y_pos, 'document.body', false);
-  document.getElementById('output_url2').href = fFormat(editor.get(), current_theme, x_pos, y_pos, 'document.body', false, true, online_settings);
+  for (let i = 0; i < 6; i++) { setTimeout(() => document.getElementById('output').style.display = i % 2 ? 'inline-block' : 'none', 100 * (i + 1)); }
+  document.getElementById('coder').href = fFormat(editor.get(), current_theme, x_pos, y_pos, 'document.body', false);
+  document.getElementById('coderX').href = fFormat(editor.get(), current_theme, x_pos, y_pos, 'document.body', false, true, online_settings);
+  document.getElementById('cs').href = URL.createObjectURL(new File([JSON.stringify(editor.get())], 'cs.json', {type: 'application/json'}));
 }
 
 function fInit() {
