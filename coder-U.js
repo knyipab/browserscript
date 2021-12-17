@@ -191,7 +191,7 @@
         ed.onload = _ => { ed.contentWindow.postMessage({cs, thn, bx, by}, '*'); };
         ed.src = 'https://knyipab.github.io/browserscript/coder/';
         ex.innerHTML = '❌';
-        [bg, ex].map(i => el(i, 'mouseup', 'touchend', _ => a.map(i => i.remove())));
+        [ex].map(i => el(i, 'mouseup', 'touchend', _ => a.map(i => i.remove())));
       };
 
       /**
